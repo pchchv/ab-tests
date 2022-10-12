@@ -11,6 +11,7 @@ import (
 )
 
 type Hypothesis struct {
+	Id      int
 	Key     string
 	Options []Option
 }
@@ -19,6 +20,8 @@ type Option struct {
 	Name    string
 	Percent float64
 }
+
+var repository = NewInMemoryRepository()
 
 func init() {
 	// Load values from .env into the system
@@ -36,11 +39,11 @@ func getEnvValue(v string) string {
 	return value
 }
 
-func createHypothesis(JSON map[string]interface{}) Hypothesis {
-	var h Hypothesis
+func createHypothesis(jsonMap map[string]interface{}) *Hypothesis {
+	h := new(Hypothesis)
 	var o Option
-	h.Key = fmt.Sprint(JSON["Key"])
-	iter := reflect.ValueOf(JSON["Options"]).MapRange()
+	h.Key = fmt.Sprint(jsonMap["Key"])
+	iter := reflect.ValueOf(jsonMap["Options"]).MapRange()
 	for iter.Next() {
 		o.Name = iter.Key().String()
 		value, err := strconv.ParseFloat(fmt.Sprint(iter.Value().Interface()), 64)
@@ -50,6 +53,7 @@ func createHypothesis(JSON map[string]interface{}) Hypothesis {
 		o.Percent = value
 		h.Options = append(h.Options, o)
 	}
+	repository.Create(h)
 	return h
 }
 
