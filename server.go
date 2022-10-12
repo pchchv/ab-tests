@@ -39,7 +39,18 @@ func getAllHypothesisHandler(c echo.Context) error {
 
 func deleteOneHandler(c echo.Context) error {
 	hypothesis := c.QueryParam("hypothesis")
+	if hypothesis == "" {
+		return c.String(http.StatusBadRequest, "No hypothesis for deletion")
+	}
 	err := deleter(hypothesis)
+	if err != nil {
+		return c.NoContent(http.StatusBadRequest)
+	}
+	return c.NoContent(http.StatusOK)
+}
+
+func deleteAllHandler(c echo.Context) error {
+	err := deleter("")
 	if err != nil {
 		return c.NoContent(http.StatusBadRequest)
 	}
@@ -50,10 +61,11 @@ func deleteOneHandler(c echo.Context) error {
 func routes(e *echo.Echo) {
 	e.GET("/", pingHandler)
 	e.GET("/ping", pingHandler)
-	e.POST("/create", createHypothesisHandler)
 	e.GET("/forUser", getHypothesisHandler)
 	e.GET("/all", getAllHypothesisHandler)
+	e.POST("/create", createHypothesisHandler)
 	e.DELETE("/one", deleteOneHandler)
+	e.DELETE("/all", deleteAllHandler)
 }
 
 func server() {
