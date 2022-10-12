@@ -65,7 +65,7 @@ func routes(e *echo.Echo) {
 	e.POST("/create", createHypothesisHandler)
 	e.PATCH("/forUser", getHypothesisHandler)
 	e.DELETE("/one", deleteOneHandler)
-	e.DELETE("/all", deleteAllHandler)
+	e.DELETE("/", deleteAllHandler)
 }
 
 func server() {
