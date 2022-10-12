@@ -78,6 +78,18 @@ func getHypothesis(hypothesis string, userId string) (string, error) {
 	return option, nil
 }
 
+func deleter(key string) error {
+	h, err := repository.GetByTitle(key)
+	if err != nil {
+		return err
+	}
+	err = repository.Delete(h.Id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func main() {
 	server()
 }
