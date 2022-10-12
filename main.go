@@ -7,6 +7,16 @@ import (
 	"github.com/joho/godotenv"
 )
 
+type Hypothesis struct {
+	Key     string
+	Options []Option
+}
+
+type Option struct {
+	Name    string
+	Percent float64
+}
+
 func init() {
 	// Load values from .env into the system
 	if err := godotenv.Load(); err != nil {
