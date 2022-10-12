@@ -33,12 +33,17 @@ func getHypothesisHandler(c echo.Context) error {
 	return c.String(http.StatusOK, option)
 }
 
+func getAllHypothesisHandler(c echo.Context) error {
+	return c.JSON(http.StatusOK, repository.GetAll())
+}
+
 // The declaration of all routes comes from it
 func routes(e *echo.Echo) {
 	e.GET("/", pingHandler)
 	e.GET("/ping", pingHandler)
 	e.POST("/create", createHypothesisHandler)
 	e.GET("/forUser", getHypothesisHandler)
+	e.GET("/allHypothesis", getAllHypothesisHandler)
 }
 
 func server() {
