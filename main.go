@@ -62,6 +62,9 @@ func createHypothesis(jsonMap map[string]interface{}) *Hypothesis {
 func getHypothesis(hypothesis string, userId string) (string, error) {
 	var option string
 	h, err := repository.GetByTitle(hypothesis)
+	if have, o := checkUserOption(h, userId); have {
+		return o, nil
+	}
 	if err != nil {
 		return option, errors.New("Hypothesis not found")
 	}
@@ -76,6 +79,18 @@ func getHypothesis(hypothesis string, userId string) (string, error) {
 	}
 	// TODO: Implement an algorithm for allocating users to options
 	return option, nil
+}
+
+// Checks if the option is assigned to the user
+func checkUserOption(h *Hypothesis, userId string) (bool, string) {
+	for _, option := range h.Options {
+		for _, uid := range option.UsersId {
+			if uid == userId {
+				return true, option.Name
+			}
+		}
+	}
+	return false, ""
 }
 
 func deleter(key string) error {

@@ -61,9 +61,9 @@ func deleteAllHandler(c echo.Context) error {
 func routes(e *echo.Echo) {
 	e.GET("/", pingHandler)
 	e.GET("/ping", pingHandler)
-	e.GET("/forUser", getHypothesisHandler)
 	e.GET("/all", getAllHypothesisHandler)
 	e.POST("/create", createHypothesisHandler)
+	e.PATCH("/forUser", getHypothesisHandler)
 	e.DELETE("/one", deleteOneHandler)
 	e.DELETE("/all", deleteAllHandler)
 }
