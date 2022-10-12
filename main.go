@@ -19,6 +19,7 @@ type Hypothesis struct {
 type Option struct {
 	Name    string
 	Percent float64
+	UsersId []string
 }
 
 var repository = NewInMemoryRepository()
@@ -55,6 +56,12 @@ func createHypothesis(jsonMap map[string]interface{}) *Hypothesis {
 	}
 	repository.Create(h)
 	return h
+}
+
+func getHypothesis(hypothesis string, userId string) string {
+	var option string
+	// TODO: Implement getting an option for a user
+	return option
 }
 
 func main() {

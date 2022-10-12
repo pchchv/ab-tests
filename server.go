@@ -23,11 +23,19 @@ func createHypothesisHandler(c echo.Context) error {
 	return c.JSON(http.StatusOK, hypothesis)
 }
 
+func getHypothesisHandler(c echo.Context) error {
+	hypothesis := c.QueryParam("hypothesis")
+	userId := c.QueryParam("user")
+	option := getHypothesis(hypothesis, userId)
+	return c.String(http.StatusOK, option)
+}
+
 // The declaration of all routes comes from it
 func routes(e *echo.Echo) {
 	e.GET("/", pingHandler)
 	e.GET("/ping", pingHandler)
 	e.POST("/create", createHypothesisHandler)
+	e.GET("/forUser", getHypothesisHandler)
 }
 
 func server() {
