@@ -60,13 +60,13 @@ func createHypothesis(jsonMap map[string]interface{}) *Hypothesis {
 }
 
 func getHypothesis(hypothesis string, userId string) (string, error) {
-	var option string
+	var countUsers int
 	h, err := repository.GetByTitle(hypothesis)
 	if have, o := checkUserOption(h, userId); have {
 		return o, nil
 	}
 	if err != nil {
-		return option, errors.New("Hypothesis not found")
+		return "", errors.New("Hypothesis not found")
 	}
 	options := h.Options
 	// If one of the options is not already in use, use it
@@ -76,9 +76,19 @@ func getHypothesis(hypothesis string, userId string) (string, error) {
 			repository.Update(h)
 			return o.Name, nil
 		}
+		countUsers += len(o.UsersId)
 	}
-	// TODO: Implement an algorithm for allocating users to options
-	return option, nil
+	percent := float64(100) / float64(countUsers)
+	for _, o := range options {
+		if float64(len(o.UsersId))*percent < o.Percent {
+			o.UsersId = append(o.UsersId, userId)
+			repository.Update(h)
+			return o.Name, nil
+		}
+	}
+	options[0].UsersId = append(options[0].UsersId, userId)
+	repository.Update(h)
+	return options[0].Name, nil
 }
 
 // Checks if the option is assigned to the user
