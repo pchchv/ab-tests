@@ -26,7 +26,10 @@ func createHypothesisHandler(c echo.Context) error {
 func getHypothesisHandler(c echo.Context) error {
 	hypothesis := c.QueryParam("hypothesis")
 	userId := c.QueryParam("user")
-	option := getHypothesis(hypothesis, userId)
+	option, err := getHypothesis(hypothesis, userId)
+	if err != nil {
+		return c.NoContent(http.StatusBadRequest)
+	}
 	return c.String(http.StatusOK, option)
 }
 

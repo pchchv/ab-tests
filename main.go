@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -58,10 +59,23 @@ func createHypothesis(jsonMap map[string]interface{}) *Hypothesis {
 	return h
 }
 
-func getHypothesis(hypothesis string, userId string) string {
+func getHypothesis(hypothesis string, userId string) (string, error) {
 	var option string
-	// TODO: Implement getting an option for a user
-	return option
+	h, err := repository.GetByTitle(hypothesis)
+	if err != nil {
+		return option, errors.New("Hypothesis not found")
+	}
+	options := h.Options
+	// If one of the options is not already in use, use it
+	for _, o := range options {
+		if len(o.UsersId) == 0 {
+			o.UsersId = append(o.UsersId, userId)
+			repository.Update(h)
+			return o.Name, nil
+		}
+	}
+	// TODO: Implement an algorithm for allocating users to options
+	return option, nil
 }
 
 func main() {
