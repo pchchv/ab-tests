@@ -24,5 +24,5 @@ func getEnvValue(v string) string {
 }
 
 func main() {
-
+	server()
 }
