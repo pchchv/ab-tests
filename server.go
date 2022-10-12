@@ -14,10 +14,20 @@ func pingHandler(c echo.Context) error {
 	return c.String(http.StatusOK, message)
 }
 
+func createHypothesisHandler(c echo.Context) error {
+	var jsonMap map[string]interface{}
+	if err := c.Bind(&jsonMap); err != nil {
+		return err
+	}
+	hypothesis := createHypothesis(jsonMap)
+	return c.JSON(http.StatusOK, hypothesis)
+}
+
 // The declaration of all routes comes from it
 func routes(e *echo.Echo) {
 	e.GET("/", pingHandler)
 	e.GET("/ping", pingHandler)
+	e.POST("/create", createHypothesisHandler)
 }
 
 func server() {
