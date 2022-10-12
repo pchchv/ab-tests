@@ -10,7 +10,7 @@ import (
 
 // Checks that the server is up and running
 func pingHandler(c echo.Context) error {
-	message := "Bill building service. Version 0.0.1"
+	message := "AB-tests service. Version 1.0.0"
 	return c.String(http.StatusOK, message)
 }
 
