@@ -1,7 +1,9 @@
 <div align="center">
 
 # AB test support service
-# Test cases are stored in memory while the application is running. If the application is stopped, all tests are deleted.
+
+# Test cases are stored in memory while the application is running. If the application is stopped, all tests are deleted
+
 </div>
 
 ## Running the application
@@ -14,6 +16,12 @@ docker-compose up --build
 
 ```
 go run .
+```
+
+### Running tests (app must be running)
+
+```
+go test .
 ```
 
 ## HTTP Methods
