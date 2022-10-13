@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"reflect"
 	"strconv"
@@ -23,7 +24,11 @@ type Option struct {
 	UsersId []string
 }
 
-var repository = NewInMemoryRepository()
+var (
+	testURL    string
+	testClient http.Client
+	repository = NewInMemoryRepository()
+)
 
 func init() {
 	// Load values from .env into the system
@@ -42,7 +47,11 @@ func getEnvValue(v string) string {
 }
 
 func createHypothesis(jsonMap map[string]interface{}) *Hypothesis {
-	h := new(Hypothesis)
+	h, err := repository.GetByTitle(fmt.Sprint(jsonMap["Key"]))
+	if err == nil {
+		return h
+	}
+	h = new(Hypothesis)
 	var o Option
 	h.Key = fmt.Sprint(jsonMap["Key"])
 	iter := reflect.ValueOf(jsonMap["Options"]).MapRange()
