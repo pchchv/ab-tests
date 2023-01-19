@@ -72,7 +72,7 @@ go test .
         user — Users Id
 
     example: 
-        "DELETE" :8080/one?hypothesis=button_color,user=5456d87545xx0
+        "PATCH" :8080/one?hypothesis=button_color,user=5456d87545xx0
 ```
 
 ```
